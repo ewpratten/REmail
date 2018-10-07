@@ -21,7 +21,6 @@ This is the list of REmail accounts out on the web. Feel free to add your own.
 | remail.dev@gmail.com | @ewpratten | YES | Manual |
 
 ## TODO
- - automatic email checking using ping-pong
  - hop count specified in config
   - picks from random list of verified emails untill hop counter hits 0, then send to RCPT
  - Anon mode
