@@ -19,7 +19,7 @@ def getUnreads(creds):
 		subj = email.header.make_header(email.header.decode_header(msg['Subject']))
 		
 		# soup body
-		soup = BeautifulSoup(str(msg))
+		soup = BeautifulSoup(str(msg), features="html.parser")
 		body = soup.find("div", dir="ltr")
 		
 		frm = email.header.make_header(email.header.decode_header(msg['From']))
@@ -48,9 +48,9 @@ def send_email(creds, recipient, subject, body):
         server.login(creds[0], creds[1])
         server.sendmail(FROM, TO, message)
         server.close()
-        print('successfully sent the mail')
+        print("Success")
     except:
-        print("failed to send mail")
+    	print("Fail")
 
 def forward(mail, creds):
 	mail[3] = mail[3][15:]
@@ -63,5 +63,7 @@ def forward(mail, creds):
 		body = str(parsed_body[len(parsed_body) - 1])
 		print([forward_addr, body])
 		send_email(creds, forward_addr, mail[2], body)
+	elif mail[3] == "ping":
+		send_email(creds, mail[1][1], mail[2], "pong")
 	else:
-		send_email(creds, mail[1][1], "REmail server", "The email you sent did not contain instructions on where to forward it too. Please take a look at: https://github.com/Ewpratten/REmail/blob/master/README.md for details.")
+		send_email(creds, mail[1][1], "REmail server error", "The email you sent did not contain instructions on where to forward it too. Please take a look at: https://github.com/Ewpratten/REmail/blob/master/README.md for details.")
