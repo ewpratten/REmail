@@ -16,9 +16,9 @@ Example:
 ## List of emails
 This is the list of REmail accounts out on the web. Feel free to add your own.
 
-| Email | Maintainer | Verified? | Refresh Time |
-| ----- | ---------- | --------- | ------------ |
-| remail.dev@gmail.com | @ewpratten | YES | Manual |
+| Email | Maintainer | Verified? | Refresh Time | Logs Kept? |
+| ----- | ---------- | --------- | ------------ | ---------- |
+| remail.dev@gmail.com | @ewpratten | YES | Manual | Yes (STDout and gmail) |
 
 ## TODO
  - hop count specified in config
@@ -26,11 +26,33 @@ This is the list of REmail accounts out on the web. Feel free to add your own.
  - Anon mode
  - Credit mode
 
-## Setting up the gmail account
-bla bla This bit isnt finished.
+## Setting up your own relay
+To set up your own relay, you will need a gmail account. You can make one on the Google website.
 
-`pip install -r requirements.txt`
+Next, on a linux device, make a file at `~/.remail/login.conf`. Its contents should look like:
+```
+USERNAME@gmail.com
+PASSWORD
 
-Save the json file to `~/.remail/credentials.json`
+```
 
+Next, clone this repo, then `cd` into it.
 
+Now, make sure you have python3 and pip installed, then install the required libraries:
+```sh
+python3 -m pip install -r requirements.txt
+```
+
+Next, run:
+```sh
+python3 src/
+```
+This will parse through your unread emails and respond / forward them.
+It is recommended to add the above command to your crontab to automatically refresh your email buffer.
+
+To update the program, run:
+```sh
+git pull
+```
+
+Thats it! Feel free to add your new email address to the list above!

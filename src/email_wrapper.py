@@ -1,4 +1,5 @@
 import smtplib
+import re
 
 import imaplib
 import email
@@ -14,6 +15,12 @@ def getUnreads(creds):
 	
 	output = []
 	for num in data[0].split():
+		# Fix some bugs
+		msg = ""
+		subj = ""
+		bodu = ""
+		frm = ""
+		
 		status, data = mail.fetch(num, '(RFC822)')
 		msg = email.message_from_bytes(data[0][1])
 		subj = email.header.make_header(email.header.decode_header(msg['Subject']))
@@ -34,6 +41,7 @@ def send_email(creds, recipient, subject, body):
     import smtplib
 
     FROM = creds[0]
+    # FROM = "no-reply@remail.retrylife.ca"
     TO = recipient if isinstance(recipient, list) else [recipient]
     SUBJECT = subject
     TEXT = body
@@ -53,17 +61,23 @@ def send_email(creds, recipient, subject, body):
     	print("Fail")
 
 def forward(mail, creds):
-	mail[3] = mail[3][15:]
-	mail[3] = mail[3][:-6]
-	
-	if mail[3][0] == ":":
-		parsed_body = str(str(mail[3])[1:]).split(":") #Extra safe
-		forward_addr = str(parsed_body[0]) + "@" + str(parsed_body[1]) + "." + str(parsed_body[2])
+	try:
+		# mail[3] = mail[3][15:]
+		# mail[3] = mail[3][:-6]
+		mail[3] = re.sub('<[^<]+?>', '', mail[3])
 		
-		body = str(parsed_body[len(parsed_body) - 1])
-		print([forward_addr, body])
-		send_email(creds, forward_addr, mail[2], body)
-	elif mail[3] == "ping":
-		send_email(creds, mail[1][1], mail[2], "pong")
-	else:
+		if mail[3][0] == ":":
+			
+			parsed_body = str(str(mail[3])[1:]).split(":") #Extra safe
+			forward_addr = str(parsed_body[0]) + "@" + str(parsed_body[1]) + "." + str(parsed_body[2])
+			
+			body = str(parsed_body[len(parsed_body) - 1])
+			
+			print([forward_addr, body])
+			send_email(creds, forward_addr, mail[2], body)
+		elif mail[3] == "ping":
+			send_email(creds, mail[1][1], mail[2], "pong")
+		else:
+			send_email(creds, mail[1][1], "REmail server error", "The email you sent did not contain instructions on where to forward it too. Please take a look at: https://github.com/Ewpratten/REmail/blob/master/README.md for details.")
+	except:
 		send_email(creds, mail[1][1], "REmail server error", "The email you sent did not contain instructions on where to forward it too. Please take a look at: https://github.com/Ewpratten/REmail/blob/master/README.md for details.")
