@@ -16,10 +16,11 @@ Example:
 ## List of emails
 This is the list of REmail accounts out on the web. Feel free to add your own.
 
+<!--start_emails-->
 | Email | Maintainer | Verified? | Refresh Time | Logs Kept? |
 | ----- | ---------- | --------- | ------------ | ---------- |
-| remail.dev@gmail.com | @ewpratten | YES | Manual | Yes (STDout and gmail) |
-
+| remail.dev@gmail.com | @ewpratten | YES | 30s | Yes (STDout and gmail) |
+<!--end_emails-->
 ## TODO
  - hop count specified in config
   - picks from random list of verified emails untill hop counter hits 0, then send to RCPT
