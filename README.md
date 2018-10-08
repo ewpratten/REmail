@@ -57,3 +57,15 @@ git pull
 ```
 
 Thats it! Feel free to add your new email address to the list above!
+
+## Running the relay on DigitalOcean (The cheaty way)
+Spin up a droplet and make sure you have the tools installed, then follow the instructions above.
+
+Next, install `screen`
+
+Then, run:
+```sh
+screen
+python3 src/ &
+Ctrl-a + d
+```
